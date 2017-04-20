@@ -19,4 +19,3 @@ class Factory
     end
   end
 end
-'Added main behaviour'
