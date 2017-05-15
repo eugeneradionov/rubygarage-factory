@@ -5,11 +5,15 @@ class Factory
       attr_accessor(*args)
 
       define_method :initialize do |*arguments|
-        @arguments = arguments
-        args.zip(@arguments).each { |method, value| send("#{method}=", value) }
+        args.zip(arguments).each do |method, value|
+          unless method.is_a? Symbol
+            raise NameError, "identifier #{method} must be constant"
+          end
+          send("#{method}=", value)
+        end
 
         def [](key)
-          key.is_a?(Integer) ? @arguments[key] : send(key.to_sym)
+          key.is_a?(Integer) ? instance_variable_get(instance_variables[key]) : send(key.to_sym)
         end
       end
 
